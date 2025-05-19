@@ -1,19 +1,25 @@
 package ar.edu.unlam.pb2.transporte;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class Transporte {
 
-	protected Paquete[] paquetes;
+	protected List<Paquete> paquetes;
 	protected double pesoPermitido;
 	protected double volumenPermitido;
 
 	public Transporte(double pesoPermitido, double volumenPermitido) {
+		this.paquetes = new LinkedList<Paquete>();
+		this.pesoPermitido = pesoPermitido;
+		this.volumenPermitido = volumenPermitido;
 	}
 
 	public double pesoActual() {
 		double total = 0;
-		for (int i = 0; i < paquetes.length; i++) {
-			if (paquetes[i] != null) {
-				total += paquetes[i].getPeso();
+		for (Paquete p : paquetes) {
+			if (p != null) {
+				total += p.getPeso();
 			}
 		}
 		return total;
@@ -21,9 +27,9 @@ public abstract class Transporte {
 
 	public double volumenActual() {
 		double total = 0;
-		for (int i = 0; i < paquetes.length; i++) {
-			if (paquetes[i] != null) {
-				total += paquetes[i].getVolumen();
+		for (Paquete p : paquetes) {
+			if (p != null) {
+				total += p.getVolumen();
 			}
 		}
 		return total;
@@ -31,12 +37,11 @@ public abstract class Transporte {
 
 	public abstract boolean puedeLlevar(Paquete paquete);
 
-	public boolean agregarPaquete(Paquete paquete) {
-		for (int i = 0; i < paquetes.length; i++) {
-			if (paquetes[i] != null && puedeLlevar(paquete) == true) {
-				paquetes[i] = paquete;
-			}
-		}
-		return false;
+	public abstract boolean agregarPaquete(Paquete paquete);
+
+	public List<Paquete> getPaquetes() {
+		return paquetes;
 	}
+
+	
 }

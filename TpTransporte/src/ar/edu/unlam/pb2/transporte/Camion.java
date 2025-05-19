@@ -2,20 +2,25 @@ package ar.edu.unlam.pb2.transporte;
 
 public class Camion extends Transporte{
 
-	public Camion(double pesoPermitido, double volumenPermitido) {
+	public Camion() {
 		super(16000, 20);
-		this.paquetes = new Paquete[100];
 	}
 
 	@Override
 	public boolean puedeLlevar(Paquete paquete) {
-		for (int i = 0; i < this.paquetes.length; i++) {
-			if (this.paquetes[i] != null && pesoActual() <= pesoPermitido
-					|| paquetes[i].getVolumen() <= volumenPermitido) {
-				return true;
-			}
+		if (pesoActual() + paquete.getPeso() > pesoPermitido
+				|| volumenActual() + paquete.getVolumen() > volumenPermitido) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean agregarPaquete(Paquete paquete) {
+		if(puedeLlevar(paquete)) {
+			paquetes.add(paquete);
+			return true;
 		}
 		return false;
 	}
-
 }

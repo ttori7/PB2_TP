@@ -1,40 +1,36 @@
 package ar.edu.unlam.pb2.transporte;
 
-public class Automovil extends Transporte {
-	
-	private String[] destinos;
+import java.util.HashSet;
+import java.util.Set;
 
-	public Automovil(double pesoPermitido, double volumenPermitido) {
+public class Automovil extends Transporte {
+
+	private Set<String> destinos;
+	private Integer destinoMax = 3;
+
+	public Automovil() {
 		super(500, 2);
-		this.paquetes = new Paquete[10];
-		this.destinos = new String[3];
+		this.destinos = new HashSet<String>();
 	}
 
 	@Override
 	public boolean puedeLlevar(Paquete paquete) {
-		for (int i = 0; i < this.paquetes.length; i++) {
-			if (this.paquetes[i] != null && pesoActual() <= pesoPermitido || volumenActual() >= volumenPermitido) {
-				if(cantDestinos()<=3 && !yaContieneDestino(paquete.getDestino()))
-				return true;
-			}
+		if (pesoActual() + paquete.getPeso() > pesoPermitido
+				|| volumenActual() + paquete.getVolumen() > volumenPermitido) {
+			return false;
 		}
-		return false;
-	}
-	
-	public Integer cantDestinos() {
-		Integer total = 0;
-		for (int i = 0; i < destinos.length; i++) {
-			if(destinos[i] != null) {
-				total++;
-			}
+		if (!destinos.contains(paquete.getDestino()) && destinos.size() >= destinoMax) {
+			return false;
 		}
-		return total;
+		return true;
 	}
-	public boolean yaContieneDestino(String destino) {
-		for (int i = 0; i < destinos.length; i++) {
-			if(destinos[i].equals(destino)) {
-				return true;
-			}
+
+	@Override
+	public boolean agregarPaquete(Paquete paquete) {
+		if(puedeLlevar(paquete)) {
+			destinos.add(paquete.getDestino());
+			paquetes.add(paquete);
+			return true;
 		}
 		return false;
 	}
